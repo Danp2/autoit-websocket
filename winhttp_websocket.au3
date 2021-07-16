@@ -89,6 +89,16 @@ Func _WinHttpWebSocketClose($hWebSocket, $iStatus, $tReason = 0)
     Return $aCall[0]
 EndFunc   ;==>_WinHttpWebSocketClose
 
+Func _WinHttpWebSocketShutdown($hWebSocket, $iStatus, $tReason = 0)
+    Local $aCall = DllCall($hWINHTTPDLL__WINHTTP, "handle", "WinHttpWebSocketShutdown", _
+            "handle", $hWebSocket, _
+            "USHORT", $iStatus, _
+            "ptr", DllStructGetPtr($tReason), _
+            "DWORD", DllStructGetSize($tReason))
+    If @error Then Return SetError(@error, @extended, -1)
+    Return $aCall[0]
+EndFunc   ;==>_WinHttpWebSocketShutdown
+
 Func _WinHttpWebSocketQueryCloseStatus($hWebSocket, ByRef $iStatus, ByRef $iReasonLengthConsumed, $tCloseReasonBuffer = 0)
     Local $aCall = DllCall($hWINHTTPDLL__WINHTTP, "handle", "WinHttpWebSocketQueryCloseStatus", _
             "handle", $hWebSocket, _
