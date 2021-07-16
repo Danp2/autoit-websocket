@@ -1,6 +1,7 @@
 ;http://code.msdn.microsoft.com/windowsdesktop/WinHTTP-WebSocket-sample-50a140b5/sourcecode?fileId=51199&pathId=1032775223
 #include "WinHttp_WebSocket.au3"
 #include <WinAPI.au3> ;_WinAPI_GetLastError
+#include <APIErrorsConstants.au3>
 
 Global $hOpen = 0, $hConnect = 0, $hRequest = 0, $hWebSocket = 0
 Global $iError = 0
