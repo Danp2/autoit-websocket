@@ -10,7 +10,12 @@ Example()
 Exit quit()
 
 Func Example()
-	Local $aSites[2][3] = [["echo.websocket.org", "", "Hello world"], ["ws.xtb.com", "demo", '{"command":"ping"}']]
+;	Local $aSites[2][3] = [["echo.websocket.org", "", "Hello world"], ["ws.xtb.com", "demo", '{"command":"ping"}']]
+
+; This service is no longer available
+;	Local $aSites[1][3] = [["echo.websocket.org", "", "Hello world"]]
+
+;	Local $aSites[1][3] = [["ws.xtb.com", "demo", '{"command":"ping"}']]
 
 	For $i = 0 To UBound($aSites) - 1
 		ConsoleWrite("====================" & @crlf)
@@ -59,12 +64,18 @@ Func Example()
 		$fStatus = _WinHttpReceiveResponse($hRequest)
 		If Not $fStatus Then
 			$iError = _WinAPI_GetLastError()
-			ConsoleWrite("SendRequest error" & @CRLF)
+			ConsoleWrite("ReceiveResponse error" & @CRLF)
 			Return False
 		EndIf
 
 		; Application should check what is the HTTP status code returned by the server and behave accordingly.
 		; WinHttpWebSocketCompleteUpgrade will fail if the HTTP status code is different than 101.
+		$iExtended = _WinHttpQueryHeaders($hRequest, $WINHTTP_QUERY_STATUS_CODE)
+
+		If $iExtended <> 101 Then
+			ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $iExtended = ' & $iExtended & @CRLF & '>Error code: ' & @error & @CRLF) ;### Debug Console
+			Return False
+		EndIf
 
 		$hWebSocket = _WinHttpWebSocketCompleteUpgrade($hRequest, 0)
 		If $hWebSocket = 0 Then
